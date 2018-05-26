@@ -2,6 +2,7 @@ import React from 'react';
 import { NativeRouter, Switch, Route } from 'react-router-native';
 
 import Signup from './Signup';
+import Products from './Products';
 import Login from './Login';
 
 export default () => (
@@ -9,6 +10,7 @@ export default () => (
         <Switch>
             <Route exact path="/" component={Signup} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/products" component={Products} />
         </Switch>
     </NativeRouter>
 );
