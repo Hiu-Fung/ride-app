@@ -28,11 +28,20 @@ const defaultState = {
 class Signup extends React.Component {
     state = defaultState;
 
-    onChangeText = (key, value) => {
+    // onChangeText = (key, value) => {
+    //     this.setState(state => ({
+    //         values: {
+    //             ...state.values,
+    //             [key]: value,
+    //         },
+    //     }));
+    // };
+
+    onChangeText = (field, value) => {
         this.setState(state => ({
             values: {
                 ...state.values,
-                [key]: value,
+                [field]: value,
             },
         }));
     };
@@ -70,15 +79,19 @@ class Signup extends React.Component {
             return;
         }
 
-        AsyncStorage.setItem('@ecommerce:token', response.data.signup.token);
+        await AsyncStorage.setItem('@ecommerce:token', response.data.signup.token);
         this.setState(defaultState);
-
+        this.props.history.push('/products');
         console.log('created');
         const token = await AsyncStorage.getItem('@ecommerce:token');
 
         console.log('token from asyncStorage');
         console.log(token);
     };
+
+    goToLoginPage() {
+        this.props.history.push('/login');
+    }
 
     render() {
         const { errors, values: { name, email, password } } = this.state;
@@ -95,26 +108,28 @@ class Signup extends React.Component {
                 <View style={{ width: 200 }}>
                     {errors.name.includes('Name') && <Text style={{ color: 'red' }}>{errors.name}</Text>}
                     <TextInput
-                        onChangeText={text => this.onChangeText('name', text)}
+                        onChangeText={this.onChangeText.bind(this, 'name')}
                         value={name}
                         style={styles.field}
                         placeholder="name"
                     />
                     {errors.email.includes('Email') && <Text style={{ color: 'red' }}>{errors.email}</Text>}
                     <TextInput
-                        onChangeText={text => this.onChangeText('email', text)}
+                        onChangeText={this.onChangeText.bind(this, 'email')}
                         value={email}
                         style={styles.field}
                         placeholder="email"
                     />
                     <TextInput
-                        onChangeText={text => this.onChangeText('password', text)}
+                        onChangeText={this.onChangeText.bind(this, 'password')}
                         value={password}
                         style={styles.field}
                         placeholder="password"
                         secureTextEntry
                     />
                     <Button title="Create account" onPress={this.submit} />
+                    <Text style={{ textAlign: 'center' }}>or</Text>
+                    <Button title="Login" onPress={this.goToLoginPage} />
                 </View>
             </View>
         );
