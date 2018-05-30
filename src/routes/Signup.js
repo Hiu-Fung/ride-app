@@ -89,8 +89,8 @@ class Signup extends React.Component {
         console.log(token);
     };
 
-    goToLoginPage() {
-        this.props.history.push('/login');
+    goToLogin() {
+        this.props.history.push('/');
     }
 
     render() {
@@ -129,7 +129,7 @@ class Signup extends React.Component {
                     />
                     <Button title="Create account" onPress={this.submit} />
                     <Text style={{ textAlign: 'center' }}>or</Text>
-                    <Button title="Login" onPress={this.goToLoginPage} />
+                    <Button title="Login" onPress={this.goToLogin.bind(this)} />
                 </View>
             </View>
         );
