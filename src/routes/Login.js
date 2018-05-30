@@ -2,6 +2,7 @@ import React from 'react';
 import { AsyncStorage, Text, Button, View, TextInput, StyleSheet } from 'react-native';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { TOKEN_KEY } from '../constants';
 
 const styles = StyleSheet.create({
     field: {
@@ -68,7 +69,7 @@ class Login extends React.Component {
         this.setState(defaultState);
         this.props.history.push('/products');
         console.log('created');
-        const token = await AsyncStorage.getItem('@ecommerce:token');
+        const token = await AsyncStorage.getItem(TOKEN_KEY);
 
         console.log('token from asyncStorage');
         console.log(token);
