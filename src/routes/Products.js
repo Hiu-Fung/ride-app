@@ -1,4 +1,9 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View, Button } from 'react-native';
 
-export default () => <Text style={{ marginTop: 50 }}>Products</Text>;
+export default ({ history }) => (
+    <View>
+        <Text style={{ marginTop: 50 }}>Products</Text>
+        <Button title="Create Product" onPress={()=> history.push('/new-product')}></Button>
+    </View>
+);
