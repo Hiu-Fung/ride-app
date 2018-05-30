@@ -16,7 +16,7 @@ const defaultState = {
 	values: {
 	name: '',
 	price: '',
-	imgUrl: '',
+	pictureUrl: '',
   },
 	errors: {
 		name: '',
@@ -96,7 +96,7 @@ class NewProduct extends React.Component {
         if (!result.cancelled) {
             console.log('result.uri');
             console.log(result.uri);
-            this.onChangeText('imgUrl', result.uri);
+            this.onChangeText('pictureUrl', result.uri);
         }
     };
 
@@ -108,7 +108,7 @@ class NewProduct extends React.Component {
     };
 
     render() {
-        const { values: { name, imgUrl, price }, errors } = this.state;
+        const { values: { name, pictureUrl, price }, errors } = this.state;
 
         return (
             <View
@@ -135,8 +135,8 @@ class NewProduct extends React.Component {
                     placeholder="email"
                 />
             <Button title="Pick an image from camera roll" onPress={this.pickImage} />
-            {imgUrl ? (
-            <Image source={{ uri: imgUrl }} style={{ width: 200, height: 200 }} />
+            {pictureUrl ? (
+            <Image source={{ uri: pictureUrl }} style={{ width: 200, height: 200 }} />
             ) : null}
             <Button title="Add Product" onPress={this.submit} />
             </View>
