@@ -36,7 +36,7 @@ class CheckToken extends React.Component {
 
     render() {
         return (
-          <Text>Loading..</Text>
+          <Text style={{ marginTop: 50 }}>Loading..</Text>
         );
     }
 }
