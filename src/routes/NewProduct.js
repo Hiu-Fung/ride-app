@@ -2,6 +2,9 @@ import React from 'react';
 import { AsyncStorage, Text, Button, View, TextInput, Image, StyleSheet } from 'react-native';
 // import Permissions from 'react-native-permissions';
 import { ImagePicker, Permissions } from 'expo';
+import { graphql } from 'react-apollo';
+import { ReactNativeFile } from 'apollo-upload-client';
+import gql from 'graphql-tag';
 
 const styles = StyleSheet.create({
 	field: {
@@ -14,9 +17,9 @@ const styles = StyleSheet.create({
 
 const defaultState = {
 	values: {
-	name: '',
-	price: '',
-	pictureUrl: '',
+        name: '',
+        price: '',
+        pictureUrl: '',
   },
 	errors: {
 		name: '',
@@ -27,41 +30,6 @@ const defaultState = {
 
 class NewProduct extends React.Component {
     state = defaultState;
-
-    onChangeText = (key, value) => {
-        this.setState(state => ({
-        values: {
-            ...state.values,
-            [key]: value,
-	        },
-	    }));
-    };
-
-    submit = async () => {
-	    if (this.state.isSubmitting) {
-            return;
-        }
-
-        this.setState({ isSubmitting: true });
-        let response;
-        try {
-            response = await this.props.mutate({
-            variables: this.state.values,
-            });
-        } catch (err) {
-          // this.setState({
-          //   errors: {
-          //     email: 'Already taken',
-          //   },
-          //   isSubmitting: false,
-          // });
-          // return;
-        }
-
-        // await AsyncStorage.setItem(TOKEN_KEY, response.data.signup.token);
-        // this.setState(defaultState);
-        this.props.history.push('/products');
-    };
 
     pickImage = async () => {
         const { photoPermission } = this.state;
@@ -107,6 +75,58 @@ class NewProduct extends React.Component {
         // are actually granted, but I'm skipping that for brevity
     };
 
+    submit = async () => {
+        if (this.state.isSubmitting) {
+            return;
+        }
+
+        this.setState({ isSubmitting: true });
+        const { pictureUrl, name, price } = this.state.values;
+
+        const picture = new ReactNativeFile({
+            uri: pictureUrl,
+            type: 'image/png',
+            name: 'default-name'
+        });
+
+        let response;
+
+        try {
+            response = await this.props.mutate({
+                variables: {
+                    name,
+                    price,
+                    picture
+                }
+            });
+        } catch (err) {
+            console.log('err');
+            console.log(err);
+            // this.setState({
+            //   errors: {
+            //     email: 'Already taken',
+            //   },
+            //   isSubmitting: false,
+            // });
+            // return;
+        }
+        console.log('response');
+        console.log(response);
+        // await AsyncStorage.setItem(TOKEN_KEY, response.data.signup.token);
+        // this.setState(defaultState);
+        this.setState({ isSubmitting: false });
+        // this.props.history.push('/products');
+    };
+
+    onChangeText = (key, value) => {
+        this.setState(state => ({
+            values: {
+                ...state.values,
+                [key]: value,
+            },
+        }));
+    };
+
     render() {
         const { values: { name, pictureUrl, price }, errors } = this.state;
 
@@ -145,4 +165,12 @@ class NewProduct extends React.Component {
     }
 }
 
-export default NewProduct;
+const createProductMutation = gql`
+    mutation($name: String!, $price: Float!, $picture: Upload!) {
+        createProduct(name: $name, price: $price, picture: $picture) {
+            id
+        }
+    }
+`;
+
+export default graphql(createProductMutation)(NewProduct);
