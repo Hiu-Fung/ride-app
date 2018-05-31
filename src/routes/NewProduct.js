@@ -113,9 +113,9 @@ class NewProduct extends React.Component {
         console.log('response');
         console.log(response);
         // await AsyncStorage.setItem(TOKEN_KEY, response.data.signup.token);
-        // this.setState(defaultState);
+        this.setState(defaultState);
         this.setState({ isSubmitting: false });
-        // this.props.history.push('/products');
+        this.props.history.push('/products');
     };
 
     onChangeText = (key, value) => {
@@ -152,7 +152,7 @@ class NewProduct extends React.Component {
                     onChangeText={this.onChangeText.bind(this, 'price')}
                     value={price}
                     style={styles.field}
-                    placeholder="email"
+                    placeholder="price"
                 />
             <Button title="Pick an image from camera roll" onPress={this.pickImage} />
             {pictureUrl ? (
