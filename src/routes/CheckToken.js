@@ -31,7 +31,14 @@ class CheckToken extends React.Component {
         console.log('response');
         console.log(response);
         await AsyncStorage.setItem(TOKEN_KEY, newToken);
-        await this.props.addUserId({ variables: { userId } });
+        console.log('userId');
+        console.log(userId);
+        try {
+            await this.props.addUserId({ variables: { userId } });
+        } catch(err) {
+            console.log('err');
+            console.log(err);
+        }
         console.log('redirect to products');
         this.props.history.push('/products');
     }

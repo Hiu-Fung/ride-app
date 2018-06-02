@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient, InMemoryCache, ApolloLink } from 'apollo-boost';
 import { createUploadLink } from 'apollo-upload-client';
-import { withClientState  } from 'apollo-link-state';
+import { withClientState } from 'apollo-link-state';
 import { setContext } from 'apollo-link-context';
 import { BASE_URL, TOKEN_KEY } from './constants';
 
@@ -23,6 +23,12 @@ const authLink = setContext(async (_, { headers }) => {
 
 const stateLink = withClientState({
     cache,
+    defaults: {
+        userId: {
+            __typename: 'userId',
+            userId: 'testId'
+        },
+    },
     resolvers: {
         Mutation: {
             addUserId: (_, { userId }, { cache }) => {
@@ -30,30 +36,25 @@ const stateLink = withClientState({
                 console.log(userId);
                 const data = {
                     // getUserId: userId
-                    getUserId: {
-                        __typename: 'UserId',
+                    userId: {
+                        __typename: 'userId',
                         userId,
                     },
                 };
-                cache.writeData({ data });
+                cache.writeData({data});
                 console.log('got this far');
                 console.log(cache);
-                return null
+                return null;
             },
         },
     },
-    defaults: {
-        getUserId: {
-            __typename: 'UserId',
-            userId: 'testId'
-        },
-    }
 });
 
 const client = new ApolloClient({
     link: ApolloLink.from([
+        authLink,
         stateLink,
-        authLink.concat(createUploadLink({ uri: BASE_URL })),
+        createUploadLink({ uri: BASE_URL }),
         ]),
     cache
 });
