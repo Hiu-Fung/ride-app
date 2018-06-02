@@ -4,7 +4,7 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient, InMemoryCache } from 'apollo-boost';
 import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from 'apollo-link-context';
-import { TOKEN_KEY } from './constants';
+import { BASE_URL, TOKEN_KEY } from './constants';
 
 import Routes from './routes';
 
@@ -19,7 +19,7 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 const client = new ApolloClient({
-    link: authLink.concat(createUploadLink({ uri: 'http://192.168.2.3:4000' })),
+    link: authLink.concat(createUploadLink({ uri: BASE_URL })),
     cache: new InMemoryCache()
 });
 
