@@ -65,14 +65,9 @@ class Login extends React.Component {
             return;
         }
 
-        await AsyncStorage.setItem('@ecommerce:token', response.data.login.token);
+        await AsyncStorage.setItem(TOKEN_KEY, response.data.login.token);
         this.setState(defaultState);
         this.props.history.push('/products');
-        console.log('created');
-        const token = await AsyncStorage.getItem(TOKEN_KEY);
-
-        console.log('token from asyncStorage');
-        console.log(token);
     };
 
     goToSignup() {
