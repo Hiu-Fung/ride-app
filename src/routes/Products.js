@@ -1,8 +1,33 @@
 import React from 'react';
-import { Text, View, Button, FlatList, Image } from 'react-native';
+import { Text, View, Button, FlatList, Image, StyleSheet } from 'react-native';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { BASE_URL } from '../constants';
+
+const styles = StyleSheet.create({
+    images: {
+        height: 100,
+        width: 100,
+    },
+    row: {
+        display: 'flex',
+        flexDirection: 'row',
+        margin: 10,
+    },
+    right: {
+        marginLeft: 10,
+        marginRight: 20,
+        flex: 1,
+        display: 'flex',
+        alignItems: 'flex-end',
+    },
+    name: {
+        fontSize: 30,
+    },
+    price: {
+        fontSize: 40,
+    },
+});
 
 const Products = ({ data: { products }, loading, history }) =>
     ((loading || !products) ? null : (
@@ -11,27 +36,34 @@ const Products = ({ data: { products }, loading, history }) =>
             <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
             <FlatList
                 data={products}
-                keyExtractor={(item) => item.id}
+                keyExtractor={item => item.id}
                 renderItem=
                     {({ item }, i) =>
-                    <View>
-                    <Text>{item.name}</Text>
-                    <Text>{item.price}</Text>
-                    <Text>{item.pictureUrl}</Text>
-                    <Image style={{ height:50, width: 50 }} source={{ uri: `${BASE_URL}/${item.pictureUrl}` }}/>
+                    <View style={styles.row}>
+                        <Image
+                            style={styles.images}
+                            source={{ uri: `${BASE_URL}/${item.pictureUrl}` }}
+                        />
+                        <View style={styles.right}>
+                            <Text style={styles.name}>{item.name}</Text>
+                            <Text style={styles.price}>{`$ ${item.price}`}</Text>
+                        </View>
                     </View>
                     }
             />
         </View>
     ));
 
-const productsQuery = gql`
+export const productsQuery = gql`
     {
         products {
             id
             name
             price
             pictureUrl
+            seller {
+                id
+            }
         }
     }
 `
