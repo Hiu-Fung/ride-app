@@ -29,30 +29,84 @@ const styles = StyleSheet.create({
     },
 });
 
-const Products = ({ data: { products }, loading, history }) =>
-    ((loading || !products) ? null : (
-        <View>
-            <Text style={{ marginTop: 50 }}>Products</Text>
-            <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
-            <FlatList
-                data={products}
-                keyExtractor={item => item.id}
-                renderItem=
-                    {({ item }, i) =>
-                    <View style={styles.row}>
-                        <Image
-                            style={styles.images}
-                            source={{ uri: `${BASE_URL}/${item.pictureUrl}` }}
-                        />
-                        <View style={styles.right}>
-                            <Text style={styles.name}>{item.name}</Text>
-                            <Text style={styles.price}>{`$ ${item.price}`}</Text>
+const defaultState = {
+    values: {
+        name: '',
+        price: '',
+        pictureUrl: '',
+    },
+    errors: {
+        name: '',
+        email: ''
+    },
+    isSubmitting: false,
+};
+
+class Products extends React.Component {
+    state = defaultState;
+
+    // componentWillReceiveProps(props){
+    //     console.log('props');
+    //     console.log(props);
+    // }
+
+    render() {
+        const { data: { products, getUserId, loading }, history } = this.props;
+        console.log('data')
+        console.log(getUserId)
+        return ((loading) ? null : (
+            <View>
+                <Text style={{ marginTop: 50 }}>Products</Text>
+                <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
+                <FlatList
+                    data={products}
+                    keyExtractor={item => item.id}
+                    renderItem=
+                        {({ item }, i) =>
+                        <View style={styles.row}>
+                            <Image
+                                style={styles.images}
+                                source={{ uri: `${BASE_URL}/${item.pictureUrl}` }}
+                            />
+                            <View style={styles.right}>
+                                <Text style={styles.name}>{item.name}</Text>
+                                <Text style={styles.price}>{`$ ${item.price}`}</Text>
+                            </View>
                         </View>
-                    </View>
-                    }
-            />
-        </View>
-    ));
+                        }
+                />
+            </View>
+        ));
+    }
+}
+
+// const Products = ({ data: { products, getUserId, loading }, history }) => {
+// console.log('data')
+// console.log(getUserId)
+//     return ((loading) ? null : (
+//         <View>
+//             <Text style={{ marginTop: 50 }}>Products</Text>
+//             <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
+//             <FlatList
+//                 data={products}
+//                 keyExtractor={item => item.id}
+//                 renderItem=
+//                     {({ item }, i) =>
+//                     <View style={styles.row}>
+//                         <Image
+//                             style={styles.images}
+//                             source={{ uri: `${BASE_URL}/${item.pictureUrl}` }}
+//                         />
+//                         <View style={styles.right}>
+//                             <Text style={styles.name}>{item.name}</Text>
+//                             <Text style={styles.price}>{`$ ${item.price}`}</Text>
+//                         </View>
+//                     </View>
+//                     }
+//             />
+//         </View>
+//     ));
+// }
 
 export const productsQuery = gql`
     {
@@ -65,6 +119,7 @@ export const productsQuery = gql`
                 id
             }
         }
+        getUserId @client
     }
 `
 
