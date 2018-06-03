@@ -26,7 +26,7 @@ const stateLink = withClientState({
     defaults: {
         userId: {
             __typename: 'userId',
-            userId: 'testId'
+            userId: 'defaultId'
         },
     },
     resolvers: {
