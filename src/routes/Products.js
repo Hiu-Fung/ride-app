@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, View, Button, FlatList, Image, StyleSheet } from 'react-native';
+import { AsyncStorage, Text, View, Button, FlatList, Image, StyleSheet } from 'react-native';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { BASE_URL } from '../constants';
+import { BASE_URL, USER_ID_KEY } from '../constants';
 
 const styles = StyleSheet.create({
     images: {
@@ -27,34 +27,60 @@ const styles = StyleSheet.create({
     price: {
         fontSize: 40,
     },
+    editSection: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
 });
 
-const Products = ({ data: { products, userId, loading }, history }) => {
-console.log('data')
-console.log(userId)
-    return ((loading) ? null : (
-        <View>
-            <Text style={{ marginTop: 50 }}>Products</Text>
-            <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
-            <FlatList
-                data={products}
-                keyExtractor={item => item.id}
-                renderItem=
-                    {({ item }, i) =>
-                    <View style={styles.row}>
-                        <Image
-                            style={styles.images}
-                            source={{ uri: `${BASE_URL}/${item.pictureUrl}` }}
-                        />
-                        <View style={styles.right}>
-                            <Text style={styles.name}>{item.name}</Text>
-                            <Text style={styles.price}>{`$ ${item.price}`}</Text>
+class Products extends React.Component {
+    state = {
+        userId: null
+    };
+
+    async componentDidMount() {
+        const token = await AsyncStorage.getItem(USER_ID_KEY)
+
+        this.setState({
+            userId: await AsyncStorage.getItem(USER_ID_KEY)
+        })
+    }
+
+    render() {
+        const { data: { products }, history } = this.props;
+        const { userId } = this.state;
+
+        return (
+            <View>
+                <Text style={{ marginTop: 50 }}>Products</Text>
+                <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
+                <FlatList
+                    data={products}
+                    keyExtractor={item => item.id}
+                    renderItem=
+                        {({ item }, i) =>
+                        <View style={styles.row}>
+                            <Image
+                                style={styles.images}
+                                source={{ uri: `${BASE_URL}/${item.pictureUrl}` }}
+                            />
+                            <View style={styles.right}>
+                                <Text style={styles.name}>{item.name}</Text>
+                                <Text style={styles.price}>{`$ ${item.price}`}</Text>
+                                <Text>{`${item.seller.id}`}</Text>
+                              {userId === item.seller.id ? (
+                                <View style={styles.editSection}>
+                                  <Button title="Edit" onPress={() => 5} />
+                                  <Button title="Delete" onPress={() => 5} />
+                                </View>
+                              ) : null}
+                            </View>
                         </View>
-                    </View>
-                    }
-            />
-        </View>
-    ));
+                        }
+                />
+            </View>
+        );
+    }
 }
 
 export const productsQuery = gql`
