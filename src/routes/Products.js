@@ -1,6 +1,6 @@
 import React from 'react';
 import { AsyncStorage, Text, View, Button, FlatList, Image, StyleSheet } from 'react-native';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { BASE_URL, USER_ID_KEY } from '../constants';
 
@@ -46,6 +46,19 @@ class Products extends React.Component {
         })
     }
 
+    deleteProduct(id) {
+        this.props.mutate({
+            variables: {
+                id: id
+            },
+            update: (store) => {
+                const data = store.readQuery({ query: productsQuery });
+                data.products = data.products.filter(x => x.id !== id);
+                store.writeQuery({ query: productsQuery, data });
+            },
+        });
+    }
+
     render() {
         const { data: { products }, history } = this.props;
         const { userId } = this.state;
@@ -56,6 +69,7 @@ class Products extends React.Component {
                 <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
                 <FlatList
                     data={products}
+                    extraData={this.state}
                     keyExtractor={item => item.id}
                     renderItem=
                         {({ item }, i) =>
@@ -70,8 +84,11 @@ class Products extends React.Component {
                                 <Text>{`${item.seller.id}`}</Text>
                               {userId === item.seller.id ? (
                                 <View style={styles.editSection}>
-                                  <Button title="Edit" onPress={() => 5} />
-                                  <Button title="Delete" onPress={() => 5} />
+                                    <Button title="Edit" onPress={() => 5} />
+                                    <Button
+                                      title="Delete"
+                                      onPress={this.deleteProduct.bind(this, item.id)}
+                                    />
                                 </View>
                               ) : null}
                             </View>
@@ -96,6 +113,17 @@ export const productsQuery = gql`
         }
         userId @client
     }
-`
+`;
 
-export default graphql(productsQuery)(Products);
+export const deleteProductMutation = gql`
+    mutation ($id: ID!) {
+        deleteProduct(where: {id: $id}) {
+            id
+        }
+    }
+`;
+
+export default compose(
+    graphql(productsQuery),
+    graphql(deleteProductMutation)
+)(Products);
