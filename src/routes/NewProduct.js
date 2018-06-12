@@ -6,6 +6,7 @@ import { graphql } from 'react-apollo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import gql from 'graphql-tag';
 import { productsQuery } from './Products';
+import Form from '../components/Form';
 
 const styles = StyleSheet.create({
 	field: {
@@ -48,7 +49,13 @@ class NewProduct extends React.Component {
         //         console.log(err);
         //     }
         // }
-        await this.askPermissionsAsync();
+        try {
+            await this.askPermissionsAsync();
+        } catch(err) {
+            console.log('err1');
+            console.log(err);
+            return;
+        }
 
         let result;
         try {
@@ -76,20 +83,19 @@ class NewProduct extends React.Component {
         // are actually granted, but I'm skipping that for brevity
     };
 
-    submit = async () => {
-        if (this.state.isSubmitting) {
-            return;
-        }
-
-        this.setState({ isSubmitting: true });
-        const { pictureUrl, name, price } = this.state.values;
-
+    submit = async (values) => {
+        const { pictureUrl, name, price } = values;
+        console.log('1');
+        console.log(name);
+        console.log(price);
+        console.log(pictureUrl);
         const picture = new ReactNativeFile({
             uri: pictureUrl,
             type: 'image/png',
             name: 'default-name'
         });
-
+        console.log('2');
+        console.log(picture);
         let response;
 
         try {
@@ -101,7 +107,9 @@ class NewProduct extends React.Component {
                 },
                 update: (store, { data: { createProduct } }) => {
                     // Read the data from our cache for this query.
+                    console.log('before update readQuery');
                     const data = store.readQuery({ query: productsQuery });
+                    console.log('after update readQuery');
                     // Add our comment from the mutation to the end.
                     data.products.push(createProduct);
                     // Write our data back to the cache.
@@ -110,7 +118,7 @@ class NewProduct extends React.Component {
 
             });
         } catch (err) {
-            console.log('err');
+            console.log('err from NewProduct.submit');
             console.log(err);
             // this.setState({
             //   errors: {
@@ -118,13 +126,13 @@ class NewProduct extends React.Component {
             //   },
             //   isSubmitting: false,
             // });
-            // return;
+            return;
         }
-        console.log('response');
-        console.log(response);
-        // await AsyncStorage.setItem(TOKEN_KEY, response.data.signup.token);
-        this.setState(defaultState);
-        this.setState({ isSubmitting: false });
+        // console.log('response');
+        // console.log(response);
+        // // await AsyncStorage.setItem(TOKEN_KEY, response.data.signup.token);
+        // this.setState(defaultState);
+        // this.setState({ isSubmitting: false });
         this.props.history.push('/products');
     };
 
@@ -140,38 +148,39 @@ class NewProduct extends React.Component {
     render() {
         const { values: { name, pictureUrl, price }, errors } = this.state;
 
-        return (
-            <View
-                style={{
-                    flex: 1,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
-            <View style={{ width: 200 }}>
-                {errors.name.includes('Name') && <Text style={{ color: 'red' }}>{errors.name}</Text>}
-                <TextInput
-                    onChangeText={this.onChangeText.bind(this, 'name')}
-                    value={name}
-                    style={styles.field}
-                    placeholder="name"
-                />
-                {errors.email.includes('Price') && <Text style={{ color: 'red' }}>{errors.Price}</Text>}
-                <TextInput
-                    onChangeText={this.onChangeText.bind(this, 'price')}
-                    value={price}
-                    style={styles.field}
-                    placeholder="price"
-                />
-            <Button title="Pick an image from camera roll" onPress={this.pickImage} />
-            {pictureUrl ? (
-            <Image source={{ uri: pictureUrl }} style={{ width: 200, height: 200 }} />
-            ) : null}
-            <Button title="Add Product" onPress={this.submit} />
-            </View>
-          </View>
-        );
+        return <Form submit={this.submit} />;
+        // return (
+        //     <View
+        //         style={{
+        //             flex: 1,
+        //             display: 'flex',
+        //             justifyContent: 'center',
+        //             alignItems: 'center',
+        //         }}
+        //     >
+        //     <View style={{ width: 200 }}>
+        //         {errors.name.includes('Name') && <Text style={{ color: 'red' }}>{errors.name}</Text>}
+        //         <TextInput
+        //             onChangeText={this.onChangeText.bind(this, 'name')}
+        //             value={name}
+        //             style={styles.field}
+        //             placeholder="name"
+        //         />
+        //         {errors.email.includes('Price') && <Text style={{ color: 'red' }}>{errors.Price}</Text>}
+        //         <TextInput
+        //             onChangeText={this.onChangeText.bind(this, 'price')}
+        //             value={price}
+        //             style={styles.field}
+        //             placeholder="price"
+        //         />
+        //     <Button title="Pick an image from camera roll" onPress={this.pickImage} />
+        //     {pictureUrl ? (
+        //     <Image source={{ uri: pictureUrl }} style={{ width: 200, height: 200 }} />
+        //     ) : null}
+        //     <Button title="Add Product" onPress={this.submit} />
+        //     </View>
+        //   </View>
+        // );
     }
 }
 
