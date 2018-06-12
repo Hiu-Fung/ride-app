@@ -33,7 +33,12 @@ const defaultState = {
 class NewProduct extends React.Component {
     state = defaultState;
 
-    pickImage = async () => {
+    constructor(props) {
+        super(props);
+        this.submit = this.submit.bind(this);
+    }
+    
+    async pickImage() {
         const { photoPermission } = this.state;
         // if ( photoPermission !== 'authorized' ) {
         //     try {
@@ -76,14 +81,14 @@ class NewProduct extends React.Component {
         }
     };
 
-    askPermissionsAsync = async () => {
+    async askPermissionsAsync() {
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
         // you would probably do something to verify that permissions
         // are actually granted, but I'm skipping that for brevity
     };
 
-    submit = async (values) => {
+    async submit(values) {
         const { pictureUrl, name, price } = values;
         console.log('1');
         console.log(name);
@@ -136,7 +141,7 @@ class NewProduct extends React.Component {
         this.props.history.push('/products');
     };
 
-    onChangeText = (key, value) => {
+    onChangeText (key, value) {
         this.setState(state => ({
             values: {
                 ...state.values,
@@ -146,41 +151,7 @@ class NewProduct extends React.Component {
     };
 
     render() {
-        const { values: { name, pictureUrl, price }, errors } = this.state;
-
         return <Form submit={this.submit} />;
-        // return (
-        //     <View
-        //         style={{
-        //             flex: 1,
-        //             display: 'flex',
-        //             justifyContent: 'center',
-        //             alignItems: 'center',
-        //         }}
-        //     >
-        //     <View style={{ width: 200 }}>
-        //         {errors.name.includes('Name') && <Text style={{ color: 'red' }}>{errors.name}</Text>}
-        //         <TextInput
-        //             onChangeText={this.onChangeText.bind(this, 'name')}
-        //             value={name}
-        //             style={styles.field}
-        //             placeholder="name"
-        //         />
-        //         {errors.email.includes('Price') && <Text style={{ color: 'red' }}>{errors.Price}</Text>}
-        //         <TextInput
-        //             onChangeText={this.onChangeText.bind(this, 'price')}
-        //             value={price}
-        //             style={styles.field}
-        //             placeholder="price"
-        //         />
-        //     <Button title="Pick an image from camera roll" onPress={this.pickImage} />
-        //     {pictureUrl ? (
-        //     <Image source={{ uri: pictureUrl }} style={{ width: 200, height: 200 }} />
-        //     ) : null}
-        //     <Button title="Add Product" onPress={this.submit} />
-        //     </View>
-        //   </View>
-        // );
     }
 }
 

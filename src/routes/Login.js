@@ -28,7 +28,12 @@ const defaultState = {
 class Login extends React.Component {
     state = defaultState;
 
-    onChangeText = (field, value) => {
+    constructor(props) {
+        super(props);
+        this.submit = this.submit.bind(this);
+    }
+
+    onChangeText (field, value) {
         this.setState(state => ({
             values: {
                 ...state.values,
@@ -37,7 +42,7 @@ class Login extends React.Component {
         }));
     };
 
-    submit = async () => {
+    async submit() {
         if (this.state.isSubmitting) {
             return;
         }

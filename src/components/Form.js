@@ -11,17 +11,6 @@ const styles = StyleSheet.create({
     },
 });
 
-// const defaultState = {
-//     buttonTitle: 'Add Product',
-//     values: {
-//         name: '',
-//         price: '',
-//         pictureUrl: '',
-//     },
-//     errors: [],
-//     isSubmitting: false
-// };
-
 export default class Form extends React.Component {
     static defaultProps = {
         buttonTitle: 'Add Product',
@@ -36,16 +25,9 @@ export default class Form extends React.Component {
 
     constructor(props) {
         super(props);
-        // const { initialValues = {} } = props;
 
-        // this.state = {
-        //     ...defaultState,
-        //     values: {
-        //         ...defaultState.values,
-        //         ...initialValues
-        //     },
-        //     errors: defaultState.errors
-        // };
+        this.pickImage = this.pickImage.bind(this);
+        this.submit = this.submit.bind(this);
 
         this.state = {
             ...props,
@@ -55,7 +37,7 @@ export default class Form extends React.Component {
         };
     }
 
-    onChangeText = (key, value) => {
+    onChangeText (key, value) {
         this.setState(state => ({
             values: {
                 ...state.values,
@@ -64,7 +46,7 @@ export default class Form extends React.Component {
         }));
     }
 
-    submit = async () => {
+    async submit() {
         if (this.state.isSubmitting) {
             return;
         }
@@ -72,24 +54,13 @@ export default class Form extends React.Component {
         const errors = await this.props.submit(this.state.values);
 
         if (errors) {
-            console.log('if');
             this.setState({
                 errors,
             });
         }
     };
 
-    // pickImage = async () => {
-    //     const result = await ImagePicker.launchImageLibraryAsync({
-    //         allowsEditing: true,
-    //         aspect: [4, 3],
-    //     });
-    //
-    //     if (!result.cancelled) {
-    //         this.onChangeText('pictureUrl', result.uri);
-    //     }
-    // };
-    pickImage = async () => {
+    async pickImage() {
         const { photoPermission } = this.state;
         // if ( photoPermission !== 'authorized' ) {
         //     try {
@@ -126,13 +97,11 @@ export default class Form extends React.Component {
         }
 
         if (!result.cancelled) {
-            console.log('result.uri');
-            console.log(result.uri);
             this.onChangeText('pictureUrl', result.uri);
         }
     };
 
-    askPermissionsAsync = async () => {
+    async askPermissionsAsync() {
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
         // you would probably do something to verify that permissions
@@ -141,7 +110,6 @@ export default class Form extends React.Component {
 
     render() {
         const { buttonTitle, values: { name, pictureUrl, price }, errors } = this.state;
-        // const { buttonTitle } = this.props;
 
         return (
             <View

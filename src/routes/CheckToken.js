@@ -5,8 +5,7 @@ import gql from 'graphql-tag';
 import { TOKEN_KEY, USER_ID_KEY } from '../constants';
 
 class CheckToken extends React.Component {
-
-    componentDidMount = async () => {
+    async componentDidMount() {
         const token = await AsyncStorage.getItem(TOKEN_KEY);
         
         if (!token) {
