@@ -64,7 +64,7 @@ class Products extends React.Component {
         const { userId } = this.state;
 
         return (
-            <View>
+            <View style={{ marginBottom: 150 }}>
                 <Text style={{ marginTop: 50 }}>Products</Text>
                 <Button title="Create Product" onPress={()=> history.push('/new-product')}/>
                 <FlatList
@@ -84,10 +84,18 @@ class Products extends React.Component {
                                 <Text>{`${item.seller.id}`}</Text>
                               {userId === item.seller.id ? (
                                 <View style={styles.editSection}>
-                                    <Button title="Edit" onPress={() => 5} />
+                                    <Button 
+                                        title="Edit" 
+                                        onPress={() =>
+                                            this.props.history.push({
+                                                pathname: '/edit-product',
+                                                    state: item,
+                                            })
+                                        }
+                                        />
                                     <Button
-                                      title="Delete"
-                                      onPress={this.deleteProduct.bind(this, item.id)}
+                                        title="Delete"
+                                        onPress={this.deleteProduct.bind(this, item.id)}
                                     />
                                 </View>
                               ) : null}
