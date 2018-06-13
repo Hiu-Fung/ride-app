@@ -54,8 +54,15 @@ const styles = StyleSheet.create({
 
 class Products extends React.Component {
     state = {
-        userId: null
+        userId: null,
+        query: ''
     };
+
+    constructor(props){
+        super(props);
+
+        this.onChangeText = this.onChangeText.bind(this);
+    }
 
     async componentDidMount() {
         const token = await AsyncStorage.getItem(USER_ID_KEY)
@@ -78,6 +85,18 @@ class Products extends React.Component {
         });
     }
 
+    onChangeText(text) {
+        this.setState({
+            query: text
+        });
+        
+        this.props.data.refetch({
+            where: {
+                name_contains: text,
+            }
+        });
+    }
+
     render() {
         const { data: { products, refetch, variables }, history } = this.props;
         const { userId } = this.state;
@@ -86,7 +105,7 @@ class Products extends React.Component {
             <View style={{ marginBottom: 200 }}>
                 <View style={{ marginTop: 30 }}>
                     <View style={styles.searchBar}>
-                        <TextInput placeholder="search"/>
+                        <TextInput placeholder="search" value={ this.state.query } onChangeText={this.onChangeText} />
                     </View>
                     <View style={styles.sortRow}>
                         <TouchableOpacity
