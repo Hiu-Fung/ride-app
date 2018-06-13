@@ -79,7 +79,7 @@ class Products extends React.Component {
     }
 
     render() {
-        const { data: { products }, history } = this.props;
+        const { data: { products, refetch, variables }, history } = this.props;
         const { userId } = this.state;
 
         return (
@@ -89,8 +89,20 @@ class Products extends React.Component {
                         <TextInput placeholder="search"/>
                     </View>
                     <View style={styles.sortRow}>
-                        <TouchableOpacity style={styles.sortButton} title="Name" onPress={() => 5}><Text style={styles.buttonText}>Name</Text></TouchableOpacity>
-                        <TouchableOpacity style={styles.sortButton} title="Price" onPress={() => 5}><Text style={styles.buttonText}>Price</Text></TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.sortButton}
+                            title="Name"
+                            onPress={() => refetch({ orderBy: variables.orderBy=== 'name_ASC' ? 'name_DESC': 'name_ASC'  })}
+                        >
+                            <Text style={styles.buttonText}>Name</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.sortButton}
+                            title="Price"
+                            onPress={() => refetch({ orderBy: variables.orderBy=== 'price_ASC' ? 'price_DESC': 'price_ASC' })}
+                        >
+                            <Text style={styles.buttonText}>Price</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <Text style={{ marginTop: 20 }}>Products</Text>
@@ -137,8 +149,8 @@ class Products extends React.Component {
 }
 
 export const productsQuery = gql`
-    {
-        products {
+    query($orderBy: ProductOrderByInput, $where: ProductWhereInput){
+        products(orderBy: $orderBy, where: $where) {
             id
             name
             price
