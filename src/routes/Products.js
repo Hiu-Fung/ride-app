@@ -5,6 +5,10 @@ import gql from 'graphql-tag';
 import { BASE_URL, USER_ID_KEY } from '../constants';
 
 const styles = StyleSheet.create({
+    listContainer: {
+        display: 'flex',
+        flex: 1,
+    },
     images: {
         height: 100,
         width: 100,
@@ -89,7 +93,7 @@ class Products extends React.Component {
         this.setState({
             query: text
         });
-        
+
         this.props.data.refetch({
             where: {
                 name_contains: text,
@@ -102,7 +106,7 @@ class Products extends React.Component {
         const { userId } = this.state;
 
         return (
-            <View style={{ marginBottom: 200 }}>
+            <View style={styles.listContainer}>
                 <View style={{ marginTop: 30 }}>
                     <View style={styles.searchBar}>
                         <TextInput placeholder="search" value={ this.state.query } onChangeText={this.onChangeText} />
