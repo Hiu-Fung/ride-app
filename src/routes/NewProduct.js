@@ -110,16 +110,16 @@ class NewProduct extends React.Component {
                     price,
                     picture
                 },
-                update: (store, { data: { createProduct } }) => {
-                    // Read the data from our cache for this query.
-                    console.log('before update readQuery');
-                    const data = store.readQuery({ query: productsQuery });
-                    console.log('after update readQuery');
-                    // Add our comment from the mutation to the end.
-                    data.products.push(createProduct);
-                    // Write our data back to the cache.
-                    store.writeQuery({ query: productsQuery, data });
-                },
+                // update: (store, { data: { createProduct } }) => {
+                //     // Read the data from our cache for this query.
+                //     console.log('before update readQuery');
+                //     const data = store.readQuery({ query: productsQuery });
+                //     console.log('after update readQuery');
+                //     // Add our comment from the mutation to the end.
+                //     data.products.push(createProduct);
+                //     // Write our data back to the cache.
+                //     store.writeQuery({ query: productsQuery, data });
+                // },
 
             });
         } catch (err) {
