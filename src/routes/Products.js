@@ -87,9 +87,10 @@ class Products extends React.Component {
                 id: id
             },
             update: (store) => {
-                const data = store.readQuery({ query: productsQuery });
+                const data = store.readQuery({ query: productsQuery, variables: { orderBy: null, where: null } });
+
                 data.products = data.products.filter(x => x.id !== id);
-                store.writeQuery({ query: productsQuery, data });
+                store.writeQuery({ query: productsQuery, variables: { orderBy: null, where: null } , data });
             },
         });
     }
