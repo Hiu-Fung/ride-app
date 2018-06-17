@@ -70,10 +70,15 @@ class Products extends React.Component {
 
     async componentDidMount() {
         const token = await AsyncStorage.getItem(USER_ID_KEY)
+        const { data: { refetch, variables } } = this.props;
 
         this.setState({
             userId: await AsyncStorage.getItem(USER_ID_KEY)
-        })
+        });
+
+        if (this.props.location.state) {
+            refetch({ orderBy: variables.orderBy });
+        }
     }
 
     deleteProduct(id) {

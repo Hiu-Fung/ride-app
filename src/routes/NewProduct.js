@@ -138,7 +138,8 @@ class NewProduct extends React.Component {
         // // await AsyncStorage.setItem(TOKEN_KEY, response.data.signup.token);
         // this.setState(defaultState);
         // this.setState({ isSubmitting: false });
-        this.props.history.push('/products');
+        // this.props.history.push('/products');
+        this.props.history.push({ pathname: '/products', state: {} });
     };
 
     onChangeText (key, value) {
