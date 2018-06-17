@@ -82,15 +82,16 @@ class Products extends React.Component {
     }
 
     deleteProduct(id) {
+        const { data: { variables }} = this.props;
         this.props.mutate({
             variables: {
                 id: id
             },
             update: (store) => {
-                const data = store.readQuery({ query: productsQuery, variables: { orderBy: null, where: null } });
+                const data = store.readQuery({ query: productsQuery, variables });
 
                 data.products = data.products.filter(x => x.id !== id);
-                store.writeQuery({ query: productsQuery, variables: { orderBy: null, where: null } , data });
+                store.writeQuery({ query: productsQuery, variables, data });
             },
         });
     }
