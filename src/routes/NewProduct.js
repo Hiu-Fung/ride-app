@@ -90,17 +90,12 @@ class NewProduct extends React.Component {
 
     async submit(values) {
         const { pictureUrl, name, price } = values;
-        console.log('1');
-        console.log(name);
-        console.log(price);
-        console.log(pictureUrl);
         const picture = new ReactNativeFile({
             uri: pictureUrl,
             type: 'image/png',
             name: 'default-name'
         });
-        console.log('2');
-        console.log(picture);
+
         let response;
 
         try {
