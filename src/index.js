@@ -30,6 +30,7 @@ const stateLink = withClientState({
         },
     },
     resolvers: {
+        Queries: () => ({}),
         Mutation: {
             addUserId: (_, { userId }, { cache }) => {
                 console.log('userId');
