@@ -1,5 +1,13 @@
-import React from 'react';
-import { AsyncStorage, Text, Button, View, TextInput, Image, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import {
+    AsyncStorage,
+    Text,
+    Button,
+    View,
+    TextInput,
+    Image,
+    StyleSheet
+} from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import { graphql } from 'react-apollo';
 import { ReactNativeFile } from 'apollo-upload-client';
@@ -21,7 +29,7 @@ const defaultState = {
     isSubmitting: false,
 };
 
-class EditProduct extends React.Component {
+class EditProduct extends Component {
     state = defaultState;
 
     constructor(props) {

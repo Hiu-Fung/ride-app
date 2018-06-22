@@ -1,7 +1,11 @@
 import React from 'react';
 import { AsyncStorage } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
-import { ApolloClient, InMemoryCache, ApolloLink } from 'apollo-boost';
+import {
+    ApolloClient,
+    InMemoryCache,
+    ApolloLink
+} from 'apollo-boost';
 import { createUploadLink } from 'apollo-upload-client';
 import { withClientState } from 'apollo-link-state';
 import { setContext } from 'apollo-link-context';

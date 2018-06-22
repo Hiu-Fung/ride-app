@@ -1,5 +1,12 @@
-import React from 'react';
-import { AsyncStorage, Text, Button, View, TextInput, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import { 
+    AsyncStorage, 
+    Text, 
+    Button, 
+    View, 
+    TextInput, 
+    StyleSheet 
+} from 'react-native';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { TOKEN_KEY } from '../constants';
@@ -25,7 +32,7 @@ const defaultState = {
     isSubmitting: false,
 }
 
-class Login extends React.Component {
+class Login extends Component {
     state = defaultState;
 
     constructor(props) {

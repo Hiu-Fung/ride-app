@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { AsyncStorage, Text } from 'react-native';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { TOKEN_KEY, USER_ID_KEY } from '../constants';
 
-class CheckToken extends React.Component {
+class CheckToken extends Component {
     async componentDidMount() {
         const token = await AsyncStorage.getItem(TOKEN_KEY);
         

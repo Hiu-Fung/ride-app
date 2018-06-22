@@ -1,6 +1,13 @@
-import React from 'react';
-import { Text, Button, View, TextInput, Image, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
 import { ImagePicker, Permissions } from 'expo';
+import {
+    Text,
+    Button,
+    View,
+    TextInput,
+    Image,
+    StyleSheet
+} from 'react-native';
 
 const styles = StyleSheet.create({
     field: {
@@ -11,7 +18,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class Form extends React.Component {
+export default class Form extends Component {
     static defaultProps = {
         buttonTitle: 'Add Product',
         values: {

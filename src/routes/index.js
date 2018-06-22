@@ -1,5 +1,9 @@
 import React from 'react';
-import { NativeRouter, Switch, Route } from 'react-router-native';
+import {
+    NativeRouter,
+    Switch,
+    Route
+} from 'react-router-native';
 
 import CheckToken from './CheckToken';
 import Login from './Login';

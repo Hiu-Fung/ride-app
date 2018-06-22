@@ -1,5 +1,15 @@
-import React from 'react';
-import { AsyncStorage, Text, TextInput, View, Button, TouchableOpacity, FlatList, Image, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import {
+    AsyncStorage,
+    Text,
+    TextInput,
+    View,
+    Button,
+    TouchableOpacity,
+    FlatList,
+    Image,
+    StyleSheet
+} from 'react-native';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { BASE_URL, USER_ID_KEY } from '../constants';
@@ -56,7 +66,7 @@ const styles = StyleSheet.create({
     }
 });
 
-class Products extends React.Component {
+class Products extends Component {
     state = {
         userId: null,
         query: ''
