@@ -27,7 +27,7 @@ class CheckToken extends Component {
         const { refreshToken: { token: newToken, userId }} = response.data;
 
         await AsyncStorage.setItem(TOKEN_KEY, newToken);
-        await AsyncStorage.setItem(USER_ID_KEY, userId)
+        await AsyncStorage.setItem(USER_ID_KEY, userId);
 
         this.props.history.push('/products');
     }
